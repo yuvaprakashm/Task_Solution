@@ -1,0 +1,6 @@
+This is the content of file2.
+Line 2 is different in file2.
+Line 3 is the same in both files.
+File2 has fewer lines.
+End of file2.
+

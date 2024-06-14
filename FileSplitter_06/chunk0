@@ -1,0 +1,123 @@
+									DAY-9
+
+1.Write a Java program to find the numeric address of the following web sites.
+·www.ignou.ac.in
+·www.indiatimes.com
+·www.rediff.com
+·www.apple.com
+In addition to this, find the Internet Address of your local host.
+Hint: InetAddress address = InetAddress.getByName
+("www.google.com");
+
+
+package testing;
+
+	import java.net.InetAddress;
+	import java.net.UnknownHostException;
+
+	public class IPAddressFinder {
+
+	    public static void main(String[] args) {
+	        findNumericAddress("www.ignou.ac.in");
+	        findNumericAddress("www.indiatimes.com");
+	        findNumericAddress("www.rediff.com");
+	        findNumericAddress("www.apple.com");
+
+	        findLocalHostAddress();
+	    }
+
+	    private static void findNumericAddress(String hostName) {
+	        try {
+	            InetAddress address = InetAddress.getByName(hostName);
+	            System.out.println("Numeric Address for " + hostName + ": " + address.getHostAddress());
+	        } catch (UnknownHostException e) {
+	            System.err.println("Unable to find address for " + hostName);
+	        }
+	    }
+
+	    private static void findLocalHostAddress() {
+	        try {
+	            InetAddress localHost = InetAddress.getLocalHost();
+	            System.out.println("Local Host Address: " + localHost.getHostAddress());
+	        } catch (UnknownHostException e) {
+	            System.err.println("Unable to find local host address");
+	        }
+	    }
+	}
+
+
+
+
+OUTPUt:
+
+Numeric Address for www.ignou.ac.in: 103.160.209.244
+Numeric Address for www.indiatimes.com: 23.57.203.120
+Numeric Address for www.rediff.com: 23.212.253.82
+Numeric Address for www.apple.com: 23.48.236.250
+Local Host Address: 192.168.0.108
+
+
+8.
+A certain drug loses 4% of its effectiveness every month in its storage. When its
+effectiveness is below 50%, it is considered expired and must be discarded. Write a program
+that determines that for how many months the drug can remain in storage. 
+
+package testing;
+
+import java.util.Scanner;
+
+public class DrugExpiration {
+
+    public static void main(String[] args) {
+        char userInput;
+
+        Scanner scanner = new Scanner(System.in);
+        do {
+            // Get input from the user
+            System.out.print("Enter initial effectiveness: ");
+            double initialEffectiveness = scanner.nextDouble();
+
+            System.out.print("Enter monthly decay (in decimal form, e.g., 0.04 for 4%): ");
+            double monthlyDecay = scanner.nextDouble();
+
+            System.out.print("Enter expiration threshold: ");
+            double expirationThreshold = scanner.nextDouble();
+
+            double currentEffectiveness = initialEffectiveness;
+            int month = 0;
+
+            while (currentEffectiveness >= expirationThreshold) {
+                System.out.printf("Month %d: effectiveness: %.5f%n", month, currentEffectiveness);
+                currentEffectiveness *= (1 - monthlyDecay);
+                month++;
+            }
+
+            System.out.printf("Month %d: effectiveness: %.5f DISCARDED%n", month, currentEffectiveness);
+            System.out.println("Do you want to execute again (y/n) ? :");
+            userInput = scanner.next().charAt(0);
+        } while (userInput == 'Y' || userInput == 'y');
+
+        // Close the scanner after the loop to avoid resource leaks
+        scanner.close();
+    }
+}
+
+
+OUTPUT:
+
+Month 0: effectiveness: 100.0
+Month 1: effectiveness: calc
+Month 2: effectiveness: 92.16
+Month 3: effectiveness: 88.47359999999999
+Month 4: effectiveness: 84.93465599999999
+Month 5: effectiveness: 81.53726975999999
+Month 6: effectiveness: 78.27577896959998
+Month 7: effectiveness: 75.14474781081599
+Month 8: effectiveness: 72.13895789838334
+Month 9: effectiveness: 69.253399582448
+Month 10: effectiveness: 66.48326359915008
+Month 11: effectiveness: 63.82393305518407
+Month 12: effectiveness: 61.27097573297671
+Month 13: effectiveness: 58.82013670365764
+Month 14: effectiveness: 56.46733123551133
+Month 15: effectivene

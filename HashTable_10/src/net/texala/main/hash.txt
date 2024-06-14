@@ -1,0 +1,11 @@
+{
+
+“Student name” = {
+                      1=”yuva”
+                      2=”prakash”
+                                     };
+Student grade = {
+                       1=80
+                       2=85
+                              }
+                           };

@@ -1,0 +1,355 @@
+									DAY-9
+
+1.Write a Java program to find the numeric address of the following web sites.
+·www.ignou.ac.in
+·www.indiatimes.com
+·www.rediff.com
+·www.apple.com
+In addition to this, find the Internet Address of your local host.
+Hint: InetAddress address = InetAddress.getByName
+("www.google.com");
+
+
+package testing;
+
+	import java.net.InetAddress;
+	import java.net.UnknownHostException;
+
+	public class IPAddressFinder {
+
+	    public static void main(String[] args) {
+	        findNumericAddress("www.ignou.ac.in");
+	        findNumericAddress("www.indiatimes.com");
+	        findNumericAddress("www.rediff.com");
+	        findNumericAddress("www.apple.com");
+
+	        findLocalHostAddress();
+	    }
+
+	    private static void findNumericAddress(String hostName) {
+	        try {
+	            InetAddress address = InetAddress.getByName(hostName);
+	            System.out.println("Numeric Address for " + hostName + ": " + address.getHostAddress());
+	        } catch (UnknownHostException e) {
+	            System.err.println("Unable to find address for " + hostName);
+	        }
+	    }
+
+	    private static void findLocalHostAddress() {
+	        try {
+	            InetAddress localHost = InetAddress.getLocalHost();
+	            System.out.println("Local Host Address: " + localHost.getHostAddress());
+	        } catch (UnknownHostException e) {
+	            System.err.println("Unable to find local host address");
+	        }
+	    }
+	}
+
+
+
+
+OUTPUt:
+
+Numeric Address for www.ignou.ac.in: 103.160.209.244
+Numeric Address for www.indiatimes.com: 23.57.203.120
+Numeric Address for www.rediff.com: 23.212.253.82
+Numeric Address for www.apple.com: 23.48.236.250
+Local Host Address: 192.168.0.108
+
+
+8.
+A certain drug loses 4% of its effectiveness every month in its storage. When its
+effectiveness is below 50%, it is considered expired and must be discarded. Write a program
+that determines that for how many months the drug can remain in storage. 
+
+package testing;
+
+import java.util.Scanner;
+
+public class DrugExpiration {
+
+    public static void main(String[] args) {
+        char userInput;
+
+        Scanner scanner = new Scanner(System.in);
+        do {
+            // Get input from the user
+            System.out.print("Enter initial effectiveness: ");
+            double initialEffectiveness = scanner.nextDouble();
+
+            System.out.print("Enter monthly decay (in decimal form, e.g., 0.04 for 4%): ");
+            double monthlyDecay = scanner.nextDouble();
+
+            System.out.print("Enter expiration threshold: ");
+            double expirationThreshold = scanner.nextDouble();
+
+            double currentEffectiveness = initialEffectiveness;
+            int month = 0;
+
+            while (currentEffectiveness >= expirationThreshold) {
+                System.out.printf("Month %d: effectiveness: %.5f%n", month, currentEffectiveness);
+                currentEffectiveness *= (1 - monthlyDecay);
+                month++;
+            }
+
+            System.out.printf("Month %d: effectiveness: %.5f DISCARDED%n", month, currentEffectiveness);
+            System.out.println("Do you want to execute again (y/n) ? :");
+            userInput = scanner.next().charAt(0);
+        } while (userInput == 'Y' || userInput == 'y');
+
+        // Close the scanner after the loop to avoid resource leaks
+        scanner.close();
+    }
+}
+
+
+OUTPUT:
+
+Month 0: effectiveness: 100.0
+Month 1: effectiveness: calc
+Month 2: effectiveness: 92.16
+Month 3: effectiveness: 88.47359999999999
+Month 4: effectiveness: 84.93465599999999
+Month 5: effectiveness: 81.53726975999999
+Month 6: effectiveness: 78.27577896959998
+Month 7: effectiveness: 75.14474781081599
+Month 8: effectiveness: 72.13895789838334
+Month 9: effectiveness: 69.253399582448
+Month 10: effectiveness: 66.48326359915008
+Month 11: effectiveness: 63.82393305518407
+Month 12: effectiveness: 61.27097573297671
+Month 13: effectiveness: 58.82013670365764
+Month 14: effectiveness: 56.46733123551133
+Month 15: effectiveness: 54.20863798609088
+Month 16: effectiveness: 52.04029246664724
+Month 17: effectiveness: 49.95868076798135 DISCARDED
+
+7.Suppose, you owe the credit card company $1000.00. The company charges you
+1.5% per month on the unpaid balance. You have decided to stop using the card and to
+pay off the debt by making a monthly payment of N dollars a month. Write a program
+that asks for the monthly payment and then write out the balance and total payments
+received so far for every succeeding month until the balance is zero or less. 
+
+ 	package testing;
+
+import java.util.Scanner;
+
+public class CreditCardPayment {
+
+    public static void main(String[] args) {
+    	char userinput;
+    
+        Scanner scanner = new Scanner(System.in);
+        do {
+        System.out.println("Enter the monthly payment:");
+        double monthlyPayment = scanner.nextDouble();
+
+        double balance = 1000.0;
+        double interestRate = 0.015;
+        double totalPayments = 0.0;
+        int month = 1;
+
+        while (balance > 0) {
+            double interest = balance * interestRate;
+            balance = balance + interest - monthlyPayment;
+
+            // Avoid negative balance
+            if (balance < 0) {
+                balance = 0;
+            }
+
+            totalPayments += monthlyPayment;
+
+            System.out.printf("Month %d: balance: %.6f total payments: %.2f%n", month, balance, totalPayments);
+
+            month++;
+        }
+        System.out.println("Do you want to execute again (y/n) ? :");
+        userinput =scanner. next().charAt(0);
+        
+    }while(userinput == 'Y' || userinput == 'y');
+        scanner.close();
+}
+}
+
+
+OUTPUT:
+
+Enter the monthly payment:
+100
+Month 1: balance: 915.000000 total payments: 100.00
+Month 2: balance: 828.725000 total payments: 200.00
+Month 3: balance: 741.155875 total payments: 300.00
+Month 4: balance: 652.273213 total payments: 400.00
+Month 5: balance: 562.057311 total payments: 500.00
+Month 6: balance: 470.488171 total payments: 600.00
+Month 7: balance: 377.545494 total payments: 700.00
+Month 8: balance: 283.208676 total payments: 800.00
+Month 9: balance: 187.456806 total payments: 900.00
+Month 10: balance: 90.268658 total payments: 1000.00
+Month 11: balance: 0.000000 total payments: 1100.00
+Do you want to execute again (y/n) ? :
+
+
+4.Write a program to test socket functionality for appropriate hostname and port number.
+
+package testing;
+
+import java.io.IOException;
+import java.net.Socket;
+
+public class SocketTester {
+
+    public static void main(String[] args) {
+        String hostname = "example.com"; // Replace with your hostname
+        int port = 80; // Replace with your port number
+
+        testSocketConnection(hostname, port);
+    }
+
+    private static void testSocketConnection(String hostname, int port) {
+        try {
+            System.out.println("Attempting to connect to " + hostname + " on port " + port);
+            Socket socket = new Socket(hostname, port);
+            
+            // If the connection is successful, the following line will be reached
+            System.out.println("Connection successful!");
+
+            // Close the socket after testing
+            socket.close();
+        } catch (IOException e) {
+            System.err.println("Connection failed. Error: " + e.getMessage());
+        }
+    }
+}
+
+
+
+OUTPUT:
+
+Attempting to connect to example.com on port 80
+Connection successful!
+
+5.Write a program for client and server chatting if client requests server for arithmetic
+operation like add, subtract, and multiplication then server perform all the above
+mentioned operations
+
+
+package testing;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
+import java.net.ServerSocket;
+import java.net.Socket;
+
+public class ArithmeticServer {
+
+    public static void main(String[] args) {
+        final int PORT = 12345; // You can use any available port
+
+        try (ServerSocket serverSocket = new ServerSocket(PORT)) {
+            System.out.println("Server is listening on port " + PORT);
+
+            while (true) {
+                Socket clientSocket = serverSocket.accept();
+                System.out.println("Accepted connection from " + clientSocket);
+
+                Thread clientHandlerThread = new Thread(() -> handleClient(clientSocket));
+                clientHandlerThread.start();
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private static void handleClient(Socket clientSocket) {
+        try (
+            BufferedReader reader = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
+            PrintWriter writer = new PrintWriter(clientSocket.getOutputStream(), true)
+        ) {
+            String request = reader.readLine();
+            System.out.println("Received request from client: " + request);
+
+            // Perform arithmetic operations based on the client's request
+            int result = performArithmeticOperation(request);
+
+            // Send the result back to the client
+            writer.println("Result: " + result);
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                clientSocket.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    private static int performArithmeticOperation(String request) {
+        String[] tokens = request.split("\\s+");
+        int operand1 = Integer.parseInt(tokens[1]);
+        int operand2 = Integer.parseInt(tokens[2]);
+
+        switch (tokens[0]) {
+            case "ADD":
+                return operand1 + operand2;
+            case "SUBTRACT":
+                return operand1 - operand2;
+            case "MULTIPLY":
+                return operand1 * operand2;
+            default:
+                return 0; // Invalid operation
+        }
+    }
+}
+
+
+package testing;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
+import java.net.Socket;
+
+public class ArithmeticClient {
+
+    public static void main(String[] args) {
+        final String SERVER_HOST = "localhost"; // Change to the server's host if needed
+        final int SERVER_PORT = 12345; // Change to the server's port if needed
+
+        try (Socket socket = new Socket(SERVER_HOST, SERVER_PORT);
+             BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+             PrintWriter writer = new PrintWriter(socket.getOutputStream(), true);
+             BufferedReader serverReader = new BufferedReader(new InputStreamReader(socket.getInputStream()))
+        ) {
+            System.out.println("Connected to server. Enter arithmetic operation (e.g., ADD 5 3):");
+
+            while (true) {
+                String userInput = reader.readLine();
+                writer.println(userInput);
+
+                String serverResponse = serverReader.readLine();
+                System.out.println("Server response: " + serverResponse);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+}
+
+
+
+OUTPUT:
+
+Connected to server. Enter arithmetic expressions or type 'Stop' to end.
+Enter arithmetic expression: 1+6
+Server says: Error: For input string: "1+6"
+Enter arithmetic expression: 5 + 5 
+Server says: Result: 10
+Enter arithmetic expression: 2 * 4
+Server says: Result: 8
+Enter arithmetic expression: 
