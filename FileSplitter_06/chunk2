@@ -1,0 +1,104 @@
+ew ServerSocket(PORT)) {
+            System.out.println("Server is listening on port " + PORT);
+
+            while (true) {
+                Socket clientSocket = serverSocket.accept();
+                System.out.println("Accepted connection from " + clientSocket);
+
+                Thread clientHandlerThread = new Thread(() -> handleClient(clientSocket));
+                clientHandlerThread.start();
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private static void handleClient(Socket clientSocket) {
+        try (
+            BufferedReader reader = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
+            PrintWriter writer = new PrintWriter(clientSocket.getOutputStream(), true)
+        ) {
+            String request = reader.readLine();
+            System.out.println("Received request from client: " + request);
+
+            // Perform arithmetic operations based on the client's request
+            int result = performArithmeticOperation(request);
+
+            // Send the result back to the client
+            writer.println("Result: " + result);
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                clientSocket.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    private static int performArithmeticOperation(String request) {
+        String[] tokens = request.split("\\s+");
+        int operand1 = Integer.parseInt(tokens[1]);
+        int operand2 = Integer.parseInt(tokens[2]);
+
+        switch (tokens[0]) {
+            case "ADD":
+                return operand1 + operand2;
+            case "SUBTRACT":
+                return operand1 - operand2;
+            case "MULTIPLY":
+                return operand1 * operand2;
+            default:
+                return 0; // Invalid operation
+        }
+    }
+}
+
+
+package testing;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
+import java.net.Socket;
+
+public class ArithmeticClient {
+
+    public static void main(String[] args) {
+        final String SERVER_HOST = "localhost"; // Change to the server's host if needed
+        final int SERVER_PORT = 12345; // Change to the server's port if needed
+
+        try (Socket socket = new Socket(SERVER_HOST, SERVER_PORT);
+             BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+             PrintWriter writer = new PrintWriter(socket.getOutputStream(), true);
+             BufferedReader serverReader = new BufferedReader(new InputStreamReader(socket.getInputStream()))
+        ) {
+            System.out.println("Connected to server. Enter arithmetic operation (e.g., ADD 5 3):");
+
+            while (true) {
+                String userInput = reader.readLine();
+                writer.println(userInput);
+
+                String serverResponse = serverReader.readLine();
+                System.out.println("Server response: " + serverResponse);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+}
+
+
+
+OUTPUT:
+
+Connected to server. Enter arithmetic expressions or type 'Stop' to end.
+Enter arithmetic expression: 1+6
+Server says: Error: For input string: "1+6"
+Enter arithmetic expression: 5 + 5 
+Server says: Result: 10
+Enter arithmetic expression: 2 * 4
+Server says: Result: 8
+Enter arithmetic expression: 
